@@ -1,6 +1,18 @@
 -- Preparation:
 --
--- git clone https://github.com/wbthomason/packer.nvim ~/.local/share/nvim/site/pack/packer/opt/packer.nvim
+-- Install this config file:
+-- $ git clone https://github.com/MarkLagodych/nvim-config ~/.config/nvim 
+--
+-- Install Packer - NeoVim package manager
+-- $ git clone https://github.com/wbthomason/packer.nvim ~/.local/share/nvim/site/pack/packer/opt/packer.nvim
+--
+-- Install JetBrains Nerd font (usual JetBrains font + special icons)
+-- $ curl -L "https://github.com/ryanoasis/nerd-fonts/releases/download/v2.2.2/JetBrainsMono.zip" -o JetBrainsNerdFont.zip
+-- $ unzip JetBrainsNerdFont.zip -d JetBrainsNerdFont
+-- $ cp JetBrainsNerdFont/* ~/.local/share/fonts
+--
+-- Run in NeoVim:
+-- :PackerInstall
 
 local o, wo, bo = vim.o, vim.wo, vim.bo
 
@@ -24,7 +36,7 @@ mapkey('v', '<C-Space>', '<ESC>')
 mapkey('t', '<C-Space>', '<C-\\><C-n>')
 
 vim.cmd 'packadd packer.nvim'
-require'packer'.startup(function(use)
+require 'packer'.startup(function(use)
     
     -- Package manager
     use 'wbthomason/packer.nvim'
@@ -32,8 +44,9 @@ require'packer'.startup(function(use)
     -- Status line theme
     use 'nvim-lualine/lualine.nvim'
 
-    -- Theme
+    -- Themes
     use 'folke/tokyonight.nvim'
+    use 'ellisonleao/gruvbox.nvim'
 
     -- Automatic quotes/braces completion
     use 'windwp/nvim-autopairs'
@@ -41,9 +54,14 @@ require'packer'.startup(function(use)
     -- File explorer
     use 'nvim-tree/nvim-tree.lua'
 
+    -- Startup screen theme
+    use {
+        "startup-nvim/startup.nvim",
+        requires = {"nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim"},
+    }
 end)
 
-require'lualine'.setup {
+require 'lualine'.setup {
     options = {
         theme = 'powerline',
         icons_enabled = false,
@@ -53,17 +71,23 @@ require'lualine'.setup {
 }
 
 require 'nvim-autopairs'.setup {}
+
 require 'nvim-tree'.setup {
-    renderer = {
-        icons = {
-            show = {
-                file = false,
-                folder = false,
-                folder_arrow = false,
-                git = false,
-            }
-        }
-    }
+-- Uncomment to hide file icons in file explorer
+--     renderer = {
+--         icons = {
+--             show = {
+--                 file = false,
+--                 folder = false,
+--                 folder_arrow = false,
+--                 git = false,
+--             }
+--         }
+--     }
+}
+
+require 'startup'.setup {
+    theme = 'dashboard'
 }
 
 vim.cmd 'colorscheme tokyonight-night'
