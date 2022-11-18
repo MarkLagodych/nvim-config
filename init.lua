@@ -14,26 +14,25 @@
 -- Run in NeoVim:
 -- :PackerInstall
 
-local o, wo, bo = vim.o, vim.wo, vim.bo
-
 
 function mapkey(mode, key, action)
     vim.api.nvim_set_keymap(mode, key, action, {noremap = true, silent = true})
 end
 
 
-o.tabstop = 4
-o.softtabstop = 4
-o.shiftwidth = 4
-o.expandtab = true
-o.background = 'dark'
-wo.number = true
-wo.wrap = false
+vim.o.tabstop = 4
+vim.o.softtabstop = 4
+vim.o.shiftwidth = 4
+vim.o.expandtab = true
+vim.o.background = 'dark'
+vim.wo.number = true
+vim.wo.wrap = false
 
 mapkey('n', '<C-Space>', '<ESC>')
 mapkey('i', '<C-Space>', '<ESC>')
 mapkey('v', '<C-Space>', '<ESC>')
 mapkey('t', '<C-Space>', '<C-\\><C-n>')
+vim.g.mapleader = ';'
 
 vim.cmd 'packadd packer.nvim'
 require 'packer'.startup(function(use)
