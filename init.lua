@@ -1,22 +1,29 @@
 -- Preparation:
 --
+-- Install NeoVim >= 0.8.0
+--
 -- Install this config file:
 -- $ git clone https://github.com/MarkLagodych/nvim-config ~/.config/nvim 
 --
--- Install Packer - NeoVim package manager
+-- Install Packer - NeoVim package manager:
 -- $ git clone https://github.com/wbthomason/packer.nvim ~/.local/share/nvim/site/pack/packer/opt/packer.nvim
 --
--- Install JetBrains Nerd font (usual JetBrains font + special icons)
+-- Install JetBrains Nerd font (usual JetBrains font + special icons):
+-- $ cd ~/Downloads # Or wherever your downloads are stored
 -- $ curl -L "https://github.com/ryanoasis/nerd-fonts/releases/download/v2.2.2/JetBrainsMono.zip" -o JetBrainsNerdFont.zip
 -- $ unzip JetBrainsNerdFont.zip -d JetBrainsNerdFont
 -- $ cp JetBrainsNerdFont/* ~/.local/share/fonts
+-- And set the font in your terminal.
 --
 -- Run in NeoVim:
 -- :PackerInstall
 
 
 function mapkey(mode, key, action)
-    vim.api.nvim_set_keymap(mode, key, action, {noremap = true, silent = true})
+    vim.api.nvim_set_keymap(mode, key, action, {
+        noremap = true,
+        silent = true
+    })
 end
 
 
@@ -26,7 +33,7 @@ vim.o.shiftwidth = 4
 vim.o.expandtab = true
 vim.o.background = 'dark'
 vim.wo.number = true
-vim.wo.wrap = false
+vim.wo.wrap = true
 
 mapkey('n', '<C-Space>', '<ESC>')
 mapkey('i', '<C-Space>', '<ESC>')
