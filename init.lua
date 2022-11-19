@@ -35,67 +35,89 @@ vim.o.background = 'dark'
 vim.wo.number = true
 vim.wo.wrap = true
 
+-- Set <leader> to ';'
+vim.g.mapleader = ';'
+-- Escaping with Ctrl+Space
 mapkey('n', '<C-Space>', '<ESC>')
 mapkey('i', '<C-Space>', '<ESC>')
 mapkey('v', '<C-Space>', '<ESC>')
 mapkey('t', '<C-Space>', '<C-\\><C-n>')
-vim.g.mapleader = ';'
+-- Make new lines in INSERT mode
+mapkey('i', '<C-q>', '<ESC>O')
+mapkey('i', '<C-w>', '<ESC>o')
+-- Jump to beginning/end of a line
+mapkey('i', '<C-a>', '<Home>')
+mapkey('i', '<C-s>', '<End>')
+mapkey('n', '<C-a>', '^')
+mapkey('n', '<C-s>', '$')
+-- Jump to beginning/end of a word
+mapkey('i', '<C-x>', '<C-Left>')
+mapkey('i', '<C-c>', '<C-Right>')
+-- Move screen up/down without moving cursor
+mapkey('n', '<C-j>', '<C-e>')
+mapkey('n', '<C-k>', '<C-y>')
 
-vim.cmd 'packadd packer.nvim'
-require 'packer'.startup(function(use)
+
+local packer = require 'packer'
+packer.startup(function(use)
     
-    -- Package manager
+    -- Package manager itself
     use 'wbthomason/packer.nvim'
 
+    -- Color scheme
+    use {
+        'folke/tokyonight.nvim',
+        config = function()
+            vim.cmd 'colorscheme tokyonight-night'
+        end
+    }
+
     -- Status line theme
-    use 'nvim-lualine/lualine.nvim'
-
-    -- Themes
-    use 'folke/tokyonight.nvim'
-    use 'ellisonleao/gruvbox.nvim'
-
-    -- Automatic quotes/braces completion
-    use 'windwp/nvim-autopairs'
-
-    -- File explorer
-    use 'nvim-tree/nvim-tree.lua'
+    use {
+        'nvim-lualine/lualine.nvim',
+        config = function()
+            require 'lualine'.setup {
+                options = {
+                    theme = 'powerline',
+                    icons_enabled = false,
+                    component_separators = { left = ':', right = ':'},
+                    section_separators = { left = '', right = ''},
+                }
+            }
+        end
+    }
 
     -- Startup screen theme
     use {
-        "startup-nvim/startup.nvim",
-        requires = {"nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim"},
+        'goolord/alpha-nvim',
+        requires = { 'kyazdani42/nvim-web-devicons' },
+        config = function ()
+            require'alpha'.setup(require'alpha.themes.startify'.config)
+        end
+    }
+
+    -- Automatic quotes/braces completion
+    use {
+        'windwp/nvim-autopairs',
+        config = function()
+            require 'nvim-autopairs'.setup {}
+        end
+    }
+
+    -- File explorer
+    use {
+        'nvim-tree/nvim-tree.lua',
+        config = function()
+            require 'nvim-tree'.setup {}
+            mapkey('n', '<C-n>', ':NvimTreeToggle<CR>')
+        end
+    }
+
+    -- Sessions manager
+    use {
+        'natecraddock/sessions.nvim',
+        config = function()
+            require 'sessions'.setup {}
+        end
     }
 end)
-
-require 'lualine'.setup {
-    options = {
-        theme = 'powerline',
-        icons_enabled = false,
-        component_separators = { left = ':', right = ':'},
-        section_separators = { left = '', right = ''},
-    }
-}
-
-require 'nvim-autopairs'.setup {}
-
-require 'nvim-tree'.setup {
--- Uncomment to hide file icons in file explorer
---     renderer = {
---         icons = {
---             show = {
---                 file = false,
---                 folder = false,
---                 folder_arrow = false,
---                 git = false,
---             }
---         }
---     }
-}
-
-require 'startup'.setup {
-    theme = 'dashboard'
-}
-
-vim.cmd 'colorscheme tokyonight-night'
-
-mapkey('n', '<C-n>', ':NvimTreeToggle<CR>')
