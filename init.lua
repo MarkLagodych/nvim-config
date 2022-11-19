@@ -1,4 +1,4 @@
--- Preparation:
+-- ===== PREPARATION =====
 --
 -- Install NeoVim >= 0.8.0
 --
@@ -17,9 +17,32 @@
 --
 -- Run in NeoVim:
 -- :PackerInstall
+-- Run if you have modified any plugin configuration:
+-- :PackerSync
+-- 
+--
+-- ===== LANGUAGE SERVER INSTALLATION =====
+--
+-- $ mkdir ~/.config/lsp
+-- $ cd ~/.config/lsp
+--
+-- Lua:
+-- Install gcc g++ clang ninja-build
+-- Build lua-language-server:
+-- $ git clone --depth=1 https://hub.fastgit.xyz/sumneko/lua-language-server
+-- $ cd lua-language-server
+-- $ git submodule update --init --recursive
+-- $ cd 3rd/luamake
+-- $ sh compile/install.sh
+-- $ cd ../..
+-- $ ./3rd/luamake/luamake rebuild
+-- Add the server to PATH:
+-- $ echo 'export PATH="${HOME}/.config/lsp/lua-language-server/bin:${PATH}"' >> ~/.bashrc
+-- $ source ~/.bashrc
 
+local vim = vim
 
-function mapkey(mode, key, action)
+local function mapkey(mode, key, action)
     vim.api.nvim_set_keymap(mode, key, action, {
         noremap = true,
         silent = true
@@ -60,7 +83,7 @@ mapkey('n', '<C-k>', '<C-y>')
 
 local packer = require 'packer'
 packer.startup(function(use)
-    
+
     -- Package manager itself
     use 'wbthomason/packer.nvim'
 
@@ -114,10 +137,25 @@ packer.startup(function(use)
     }
 
     -- Sessions manager
+    -- :SessionsSave - save session
+    -- :SessionsLoad - load session
     use {
         'natecraddock/sessions.nvim',
         config = function()
-            require 'sessions'.setup {}
+            require 'sessions'.setup {
+                events = {'WinEnter', 'VimLeavePre'},
+                session_filepath = '.neovim/session'
+            }
         end
     }
+
+    use {
+        'neovim/nvim-lspconfig',
+        config = function()
+            local lspconfig = require 'lspconfig'
+            lspconfig.rust_analyzer.setup {}
+            lspconfig.sumneko_lua.setup {}
+        end
+    }
+
 end)
